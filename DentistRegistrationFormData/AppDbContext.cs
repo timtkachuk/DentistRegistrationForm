@@ -32,8 +32,8 @@ namespace DentistRegistrationFormData
                .IsUnique();
 
                entity
-               .HasMany(p => p.Procedures)
-               .WithMany(p => p.Users);
+               .HasMany(p => p.Procedures);
+               
 
            });
 
@@ -50,6 +50,10 @@ namespace DentistRegistrationFormData
                 entity
                 .HasIndex(p => new { p.Name })
                 .IsUnique();
+
+                entity
+                .HasMany(p => p.Users);
+                
             });
             #endregion
 

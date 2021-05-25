@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentistRegistrationForm", "DentistRegistrationForm\DentistRegistrationForm.csproj", "{7624EA22-0C04-4D8A-B9A1-C8C83576B4B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentistRegistrationForm", "DentistRegistrationForm\DentistRegistrationForm.csproj", "{7624EA22-0C04-4D8A-B9A1-C8C83576B4B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentistRegistrationFormData", "DentistRegistrationFormData\DentistRegistrationFormData.csproj", "{2F71D01C-87EE-46E6-A508-BB4FC07C6265}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentistRegistrationFormData", "DentistRegistrationFormData\DentistRegistrationFormData.csproj", "{2F71D01C-87EE-46E6-A508-BB4FC07C6265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationsSqlServer", "MigrationsSqlServer\MigrationsSqlServer.csproj", "{315FDCE6-1697-4E29-AC06-4A8B8F61A419}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MigrationsMySql", "MigrationsMySql\MigrationsMySql.csproj", "{DD633330-A07A-4926-B89E-F504993D8AD4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{2F71D01C-87EE-46E6-A508-BB4FC07C6265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F71D01C-87EE-46E6-A508-BB4FC07C6265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F71D01C-87EE-46E6-A508-BB4FC07C6265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{315FDCE6-1697-4E29-AC06-4A8B8F61A419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315FDCE6-1697-4E29-AC06-4A8B8F61A419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315FDCE6-1697-4E29-AC06-4A8B8F61A419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315FDCE6-1697-4E29-AC06-4A8B8F61A419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD633330-A07A-4926-B89E-F504993D8AD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD633330-A07A-4926-B89E-F504993D8AD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD633330-A07A-4926-B89E-F504993D8AD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD633330-A07A-4926-B89E-F504993D8AD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

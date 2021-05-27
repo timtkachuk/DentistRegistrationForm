@@ -124,10 +124,67 @@ namespace DentistRegistrationForm.Controllers
                         case "PasswordRequiresUpper":
                             ModelState.AddModelError("", "Lorem ipsum");
                             break;
-                    }                    
+                    }
                 }
                 return View(model);
             }
+        }
+        public async Task<IActionResult> ConfirmEmail(int id, string token)
+        {
+            var user = context.Users.Find(id);
+            var result = await userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return View("EMailSuccess");
+            }
+            else
+            {
+                return View("EMailFail");
+            }
+        }
+
+        public IActionResult ResetPasswordForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPasswordForm(ResetPasswordViewModel model)
+        {
+            var user = await userManager.FindByNameAsync(model.UserName);
+            if (user != null)
+            {
+                var passwordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                var messageBody =
+                    string.Format(
+                    System.IO
+                    .File.ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "ResetPasswordTemplate.html"))
+                    , user.Name
+                    , Url.Action("ResetPassword", "Account", new { id = user.Id, token = passwordResetToken }, httpContextAccessor.HttpContext.Request.Scheme)
+                    );
+                await mailMessageService.Send(user.UserName, "Dentist App Reset Password", messageBody);
+                return View("ResetPasswordFormSuccess");
+            }
+            else
+            {
+                ModelState.AddModelError("", "E-Mail adress does not match with our system");
+                return View(model);
+            }
+
+        }
+
+        public IActionResult ResetPassword(string id, string token)
+        {
+            return View(new NewPasswordViewModel { Id = id, Token = token });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(NewPasswordViewModel model)
+        {
+            var user = await userManager.FindByIdAsync(model.Id);
+            var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            return View("ResetPasswordSuccess");
+
         }
     }
 }

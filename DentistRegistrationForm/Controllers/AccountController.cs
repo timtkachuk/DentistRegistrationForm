@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DentistRegistrationForm.Controllers
@@ -82,50 +85,61 @@ namespace DentistRegistrationForm.Controllers
                 Name = model.Name,
                 PhoneNumber = model.PhoneNumber
             };
-            var result = await userManager.CreateAsync(newUser, model.Password);
-            await userManager.AddToRoleAsync(newUser, "Clients");
-
-            if (result.Succeeded)
+            try
             {
-                var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
-                var messageBody =
-                    string.Format(
-                    System.IO
-                    .File
-                    .ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "EMailConfirmationTemplate.html"))
-                    , model.Name
-                    , Url.Action("ConfirmEmail", "Account", new { id = newUser.Id, token = emailConfirmationToken }, httpContextAccessor.HttpContext.Request.Scheme)
-                    );
+                var result = await userManager.CreateAsync(newUser, model.Password);
 
-                await mailMessageService.Send(model.UserName, "E-Mail Confirmation Message", messageBody);
-                return View("RegisterSuccess");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
+                if (result.Succeeded)
                 {
-                    switch (error.Code)
-                    {
-                        case "DuplicateUserName":
-                            ModelState.AddModelError("", "E-Mail is in use");
-                            break;
-                        case "PasswordTooShort":
-                            ModelState.AddModelError("", "Lorem ipsum");
-                            break;
-                        case "PasswordRequiresDigit":
-                            ModelState.AddModelError("", "Lorem ipsum");
-                            break;
-                        case "PasswordRequiresNonAlphanumeric":
-                            ModelState.AddModelError("", "Lorem ipsum");
-                            break;
-                        case "PasswordRequiresLower":
-                            ModelState.AddModelError("", "Lorem ipsum");
-                            break;
-                        case "PasswordRequiresUpper":
-                            ModelState.AddModelError("", "Lorem ipsum");
-                            break;
-                    }
+                    await userManager.AddToRoleAsync(newUser, "Clients");
+                    var emailConfirmationToken = await userManager.GenerateEmailConfirmationTokenAsync(newUser);
+                    var messageBody =
+                        string.Format(
+                        System.IO
+                        .File
+                        .ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "EMailConfirmationTemplate.html"))
+                        , model.Name
+                        , Url.Action("ConfirmEmail", "Account", new { id = newUser.Id, token = emailConfirmationToken }, httpContextAccessor.HttpContext.Request.Scheme)
+                        );
+
+                    await mailMessageService.Send(model.UserName, "E-Mail Confirmation Message", messageBody);
+                    return View("RegisterSuccess");
                 }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        switch (error.Code)
+                        {
+                            case "DuplicateUserName":
+                                ModelState.AddModelError("", "E-Mail is in use");
+                                break;
+                            case "DuplicatePhoneNumber":
+                                ModelState.AddModelError("", "Phone number is in use");
+                                break;
+                            case "PasswordTooShort":
+                                ModelState.AddModelError("", "Lorem ipsum");
+                                break;
+                            case "PasswordRequiresDigit":
+                                ModelState.AddModelError("", "Lorem ipsum");
+                                break;
+                            case "PasswordRequiresNonAlphanumeric":
+                                ModelState.AddModelError("", "Lorem ipsum");
+                                break;
+                            case "PasswordRequiresLower":
+                                ModelState.AddModelError("", "Lorem ipsum");
+                                break;
+                            case "PasswordRequiresUpper":
+                                ModelState.AddModelError("", "Lorem ipsum");
+                                break;
+                        }
+                    }
+                    return View(model);
+                }
+            }
+            catch (DbUpdateException)
+            {
+                TempData["error"] = $"The same name and phone number of {model.Name} {model.PhoneNumber} exists.";
                 return View(model);
             }
         }
@@ -185,6 +199,35 @@ namespace DentistRegistrationForm.Controllers
             var result = await userManager.ResetPasswordAsync(user, model.Token, model.Password);
             return View("ResetPasswordSuccess");
 
+        }
+
+        public async Task<IActionResult> NewBooking()
+        {
+            ViewData["Doctors"] = new SelectList(context.Users.ToList().Where(p => userManager.IsInRoleAsync(p, "Doctors").Result), "Id", "Name");
+            ViewData["Procedures"] = new SelectList(await context.Procedures.ToListAsync(), "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewBooking(Booking model)
+        {
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
+
+            context.Entry(model).State = EntityState.Added;
+            await context.SaveChangesAsync();
+
+            var messageBody =
+                string.Format(
+                System.IO
+                .File.ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "BookingConfirmationTemplate.html"))
+                , user.Name
+                , model.DateTime.ToShortDateString()
+                , model.DateTime.ToShortTimeString()
+                );
+
+            await mailMessageService.Send(user.UserName, "Booking Confirmation Message", messageBody);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

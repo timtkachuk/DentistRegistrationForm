@@ -1,5 +1,5 @@
 ﻿@model RegisterViewModel
-@{ 
+@{
     ViewData["Title"] = "New Member";
 }
 @if (!ViewContext.ModelState.IsValid)
@@ -50,7 +50,7 @@
         <div class="col-12 col-md-6">
             <div class="form-group">
                 <label asp-for="PhoneNumber"></label>
-                <input class="form-control" asp-for="PhoneNumber" placeholder="Please enter your phone number" />
+                <input class="form-control" asp-for="PhoneNumber" id="phonenumber" placeholder="Please enter your phone number" />
                 <span asp-validation-for="PhoneNumber"></span>
             </div>
         </div>
@@ -61,5 +61,11 @@
 </form>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            $('#phonenumber').mask('(0)00 00 00 00');
+        });
+    </script>
 }

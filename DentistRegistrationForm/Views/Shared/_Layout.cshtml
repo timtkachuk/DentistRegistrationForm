@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - DentistRegistrationForm</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" />
 </head>
 <body>
     <header class="container">
@@ -36,6 +37,25 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.min.js"></script>
     @RenderSection("Scripts", required: false)
+
+    <script>
+        $(() => {
+            $(".selectpicker").selectpicker();
+        });
+    </script>
+
+    @if (TempData["error"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "ERROR!",
+                html: "@TempData["error"]"
+            });
+        </script>
+    }
 </body>
 </html>

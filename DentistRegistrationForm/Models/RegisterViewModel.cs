@@ -29,7 +29,7 @@ namespace DentistRegistrationForm.Models
         [Required(ErrorMessage = "{0} field cannot be empty!")]
         public string Name { get; set; }
 
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Phone Number")]        
         [Required(ErrorMessage = "{0} field cannot be empty!")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }

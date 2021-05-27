@@ -1,0 +1,37 @@
+﻿@model NewBookingViewModel
+@{
+    ViewData["Title"] = "New Booking";
+}
+
+<form asp-action="NewBooking" asp-controller="Account" method="post">
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="DoctorId"></label>
+                <select asp-for="DoctorId" asp-items="@ViewData["Doctors"] as SelectList" class="form-control selectpicker"></select>
+                <span asp-validation-for="DoctorId"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="ProcedureId"></label>
+                <select asp-for="ProcedureId" asp-items="@ViewData["Procedures"] as SelectList" class="form-control selectpicker"></select>
+                <span asp-validation-for="ProcedureId"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="dateTime"></label>
+                <input class="form-control" asp-for="dateTime" placeholder="Please select date and time" />
+                <span asp-validation-for="dateTime"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <button class="btn btn-primary">Register</button>
+    </div>
+</form>

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MigrationsMySql.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210525175759_Mig001")]
-    partial class Mig001
+    [Migration("20210525204447_KickStart")]
+    partial class KickStart
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,35 @@ namespace MigrationsMySql.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.6");
+
+            modelBuilder.Entity("DentistRegistrationFormData.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProcedureId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("ProcedureId");
+
+                    b.ToTable("Bookings");
+                });
 
             modelBuilder.Entity("DentistRegistrationFormData.Procedure", b =>
                 {
@@ -34,9 +63,6 @@ namespace MigrationsMySql.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("RoleId");
 
@@ -245,19 +271,31 @@ namespace MigrationsMySql.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ProcedureUser", b =>
+            modelBuilder.Entity("DentistRegistrationFormData.Booking", b =>
                 {
-                    b.Property<int>("ProceduresId")
-                        .HasColumnType("int");
+                    b.HasOne("DentistRegistrationFormData.User", "Client")
+                        .WithMany("ClientBookings")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
+                    b.HasOne("DentistRegistrationFormData.User", "Doctor")
+                        .WithMany("DoctorBookings")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasKey("ProceduresId", "UsersId");
+                    b.HasOne("DentistRegistrationFormData.Procedure", "Procedure")
+                        .WithMany("Bookings")
+                        .HasForeignKey("ProcedureId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasIndex("UsersId");
+                    b.Navigation("Client");
 
-                    b.ToTable("ProcedureUser");
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Procedure");
                 });
 
             modelBuilder.Entity("DentistRegistrationFormData.Procedure", b =>
@@ -318,24 +356,21 @@ namespace MigrationsMySql.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProcedureUser", b =>
+            modelBuilder.Entity("DentistRegistrationFormData.Procedure", b =>
                 {
-                    b.HasOne("DentistRegistrationFormData.Procedure", null)
-                        .WithMany()
-                        .HasForeignKey("ProceduresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DentistRegistrationFormData.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("DentistRegistrationFormData.Role", b =>
                 {
                     b.Navigation("Procedures");
+                });
+
+            modelBuilder.Entity("DentistRegistrationFormData.User", b =>
+                {
+                    b.Navigation("ClientBookings");
+
+                    b.Navigation("DoctorBookings");
                 });
 #pragma warning restore 612, 618
         }

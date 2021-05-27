@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MigrationsMySql.Migrations
 {
-    public partial class Mig001 : Migration
+    public partial class KickStart : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -213,27 +213,37 @@ namespace MigrationsMySql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ProcedureUser",
+                name: "Bookings",
                 columns: table => new
                 {
-                    ProceduresId = table.Column<int>(type: "int", nullable: false),
-                    UsersId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    ProcedureId = table.Column<int>(type: "int", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProcedureUser", x => new { x.ProceduresId, x.UsersId });
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProcedureUser_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_Bookings_AspNetUsers_ClientId",
+                        column: x => x.ClientId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ProcedureUser_Procedures_ProceduresId",
-                        column: x => x.ProceduresId,
+                        name: "FK_Bookings_AspNetUsers_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Procedures_ProcedureId",
+                        column: x => x.ProcedureId,
                         principalTable: "Procedures",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -281,20 +291,24 @@ namespace MigrationsMySql.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Procedures_Name",
-                table: "Procedures",
-                column: "Name",
-                unique: true);
+                name: "IX_Bookings_ClientId",
+                table: "Bookings",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_DoctorId",
+                table: "Bookings",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_ProcedureId",
+                table: "Bookings",
+                column: "ProcedureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Procedures_RoleId",
                 table: "Procedures",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProcedureUser_UsersId",
-                table: "ProcedureUser",
-                column: "UsersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -315,7 +329,7 @@ namespace MigrationsMySql.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ProcedureUser");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

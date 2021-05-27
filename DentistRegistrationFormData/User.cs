@@ -12,6 +12,7 @@ namespace DentistRegistrationFormData
     {
         public string Name { get; set; }
 
-        public virtual ICollection<Procedure> Procedures { get; set; } = new HashSet<Procedure>();
+        public virtual ICollection<Booking> ClientBookings { get; set; } = new HashSet<Booking>();
+        public virtual ICollection<Booking> DoctorBookings { get; set; } = new HashSet<Booking>();
     }
 }

@@ -32,8 +32,18 @@ namespace DentistRegistrationFormData
                .IsUnique();
 
                entity
-               .HasMany(p => p.Procedures);
-               
+               .HasMany(p => p.ClientBookings)
+               .WithOne(p => p.Client)
+               .HasForeignKey(p => p.ClientId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+               entity
+              .HasMany(p => p.DoctorBookings)
+              .WithOne(p => p.Doctor)
+              .HasForeignKey(p => p.DoctorId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+
 
            });
 
@@ -44,7 +54,7 @@ namespace DentistRegistrationFormData
             {
                 entity
                 .Property(p => p.Name)
-                .HasMaxLength(50)
+                .HasMaxLength(50)                
                 .IsRequired(true);
 
                 entity
@@ -52,14 +62,25 @@ namespace DentistRegistrationFormData
                 .IsUnique();
 
                 entity
-                .HasMany(p => p.Users);
-                
+                .HasMany(p => p.Bookings)
+                .WithOne(p => p.Procedure)
+                .HasForeignKey(p => p.ProcedureId)
+                .OnDelete(DeleteBehavior.Restrict);
             });
             #endregion
 
+            #region Booking
+            builder.Entity<Booking>(entity =>
+            {
+                entity
+                .HasIndex(p => new { p.DateTime, p.DoctorId, p.ClientId })
+                .IsUnique(false);
+            });
+            #endregion
             base.OnModelCreating(builder);
         }
 
         public virtual DbSet<Procedure> Procedures { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
     }
 }

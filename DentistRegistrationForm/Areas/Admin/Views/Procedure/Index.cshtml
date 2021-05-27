@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Procedure>
+@{
+    ViewData["Title"] = "Procedures";
+}
+
+<partial name="ToolbarPartial" />
+
+<div class="card">
+    <div class="card-header">@ViewData["Title"] Form</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Procedure Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link">
+                            <i class="p-2 fa fa-pen"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-link remove-btn">
+                            <i class="p-2 fa fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(() => {
+            $('.remove-btn').on('click', (e) => {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'WARNING!',
+                    html: 'This record will be permanently removed!',
+                    showCancelButton: true
+                })
+                    .then((response) => {
+                        if (response.value) {
+                            window.location = $(e.currentTarget).attr('href');
+                        }
+                    });
+
+                return false;
+            });
+        });
+    </script>
+}

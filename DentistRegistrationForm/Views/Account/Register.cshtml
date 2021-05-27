@@ -1,0 +1,65 @@
+﻿@model RegisterViewModel
+@{ 
+    ViewData["Title"] = "New Member";
+}
+@if (!ViewContext.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @Html.ValidationSummary()
+    </div>
+}
+
+<form asp-action="Register" asp-controller="Account" method="post">
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input class="form-control" asp-for="UserName" placeholder="Please enter your e-mail adress" />
+                <span asp-validation-for="UserName"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" placeholder="Please enter your name and last name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input class="form-control" asp-for="Password" placeholder="Please enter your password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="PasswordVerify"></label>
+                <input class="form-control" asp-for="PasswordVerify" placeholder="Please verify your password" />
+                <span asp-validation-for="PasswordVerify"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-12 col-md-6">
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input class="form-control" asp-for="PhoneNumber" placeholder="Please enter your phone number" />
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <button class="btn btn-primary">Register</button>
+    </div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

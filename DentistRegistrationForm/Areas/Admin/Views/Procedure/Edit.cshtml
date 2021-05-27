@@ -1,0 +1,13 @@
+﻿@model Procedure
+@{
+    var entity = "Procedure";
+    ViewData["Title"] = $"Edit {entity}";
+}
+
+<form method="post">
+    <partial name="CreateOrUpdate" model="Model" />
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial">
+}

@@ -12,6 +12,6 @@ Admin panel :
 	-Listing of bookings. (needs to be modified)
 
 HomePage : 
-	-Registration of users with auto email confirmation token,
-	-Forgot password with auto email,
-	-After user is logged in new booking function. 
+	-Registration of users with auto email confirmation token, (for this testing mailtrap has been used)
+	-Forgot password with auto email, (for this testing mailtrap has been used)
+	-After user is logged in, can make appointment for a new booking. Auto email confirmation of booking is sent by email.

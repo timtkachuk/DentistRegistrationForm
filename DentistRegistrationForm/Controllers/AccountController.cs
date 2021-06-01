@@ -1,6 +1,7 @@
 ﻿using DentistRegistrationForm.Models;
 using DentistRegistrationForm.Services;
 using DentistRegistrationFormData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -211,23 +212,34 @@ namespace DentistRegistrationForm.Controllers
         [HttpPost]
         public async Task<IActionResult> NewBooking(Booking model)
         {
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            try
+            {
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
 
-            context.Entry(model).State = EntityState.Added;
-            await context.SaveChangesAsync();
+                model.ClientId = user.Id;
 
-            var messageBody =
-                string.Format(
-                System.IO
-                .File.ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "BookingConfirmationTemplate.html"))
-                , user.Name
-                , model.DateTime.ToShortDateString()
-                , model.DateTime.ToShortTimeString()
-                );
+                context.Entry(model).State = EntityState.Added;
+                await context.SaveChangesAsync();
 
-            await mailMessageService.Send(user.UserName, "Booking Confirmation Message", messageBody);
+                var messageBody =
+                    string.Format(
+                    System.IO
+                    .File.ReadAllText(System.IO.Path.Combine(webHostEnvironment.WebRootPath, "Content", "BookingConfirmationTemplate.html"))
+                    , user.Name
+                    , model.dateTime.ToShortDateString()
+                    , model.dateTime.ToShortTimeString()
+                    );
 
-            return RedirectToAction("Index", "Home");
+                await mailMessageService.Send(user.UserName, "Booking Confirmation Message", messageBody);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }

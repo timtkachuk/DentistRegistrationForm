@@ -1,0 +1,83 @@
+﻿@model IEnumerable<User>
+@inject UserManager<User> userManager
+@{
+    ViewData["Title"] = "User List";
+}
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <div class="card-title">User List</div>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name - Last Name</th>
+                    <th>E-Mail</th>
+                    <th>Phone Number</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>
+                            @user.Name
+                        </td>
+                        <td>
+                            <a href="mailto:@user.UserName">@user.UserName</a>
+                        </td>
+                        <td>
+                            @user.PhoneNumber
+                        </td>
+                        <td>
+                            <select class="custom-select role-menu" data-id="@user.Id">
+                                @foreach (var role in @ViewData["Roles"] as SelectList)
+                                {
+                                    var result = userManager.IsInRoleAsync(user, role.Value).Result;
+                                    if (result)
+                                    {
+                                        <option selected value="@role.Value">@role.Text</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role.Value">@role.Text</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(() => {
+            $('.role-menu').on('change', (e) => {
+
+                var newRole = $(e.currentTarget).val();
+                var id = $(e.currentTarget).attr('data-id');
+
+                swal.fire({
+                    icon: 'warning',
+                    title: 'Role Change',
+                    html: 'are you sure?',
+                    showCancelButton: true,
+                    cancelButtonText: 'İPTAL',
+                    confirmButtonText: 'TAMAM'
+                })
+                    .then((value) => {
+                        if (value) {
+
+                            window.location = '@Url.Action("ChangeRole", "Users")/'+id+'/?newRole=' + newRole;
+                        }
+                    });
+            });
+        });
+    </script>
+}

@@ -3,14 +3,16 @@ using System;
 using DentistRegistrationFormData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MigrationsMySql.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210528143156_Mig003")]
+    partial class Mig003
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +48,7 @@ namespace MigrationsMySql.Migrations
 
                     b.HasIndex("ProcedureId");
 
-                    b.HasIndex("DateTime", "DoctorId", "ProcedureId");
+                    b.HasIndex("DateTime", "DoctorId", "ClientId");
 
                     b.ToTable("Bookings");
                 });
@@ -294,7 +296,7 @@ namespace MigrationsMySql.Migrations
                     b.HasOne("DentistRegistrationFormData.Procedure", "Procedure")
                         .WithMany("Bookings")
                         .HasForeignKey("ProcedureId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Client");

@@ -14,11 +14,7 @@ else
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-user"></i>  Welcome @Model.Name
         </a>
-        <div class="dropdown-menu" aria-labelledby="userDropdown">
-            <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                <i class="fa fa-wrench"></i>
-                My Profile
-            </a>
+        <div class="dropdown-menu" aria-labelledby="userDropdown">           
             <a class="dropdown-item" asp-controller="Account" asp-action="NewBooking">
                 <i class="fa fa-wrench"></i>
                 New Booking

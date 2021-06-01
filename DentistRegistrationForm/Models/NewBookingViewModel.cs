@@ -18,6 +18,6 @@ namespace DentistRegistrationForm.Models
 
         [Display(Name = "Pick A Date")]
         [Required(ErrorMessage = "{0} field cannot be empty!")]
-        public DateTime dateTime { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }

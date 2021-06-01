@@ -73,7 +73,7 @@ namespace DentistRegistrationFormData
             builder.Entity<Booking>(entity =>
             {
                 entity
-                .HasIndex(p => new { p.DateTime, p.DoctorId, p.ClientId })
+                .HasIndex(p => new { p.dateTime, p.DoctorId, p.ProcedureId })
                 .IsUnique(false);
             });
             #endregion

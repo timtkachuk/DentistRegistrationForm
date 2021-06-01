@@ -1,3 +1,46 @@
-﻿@{ 
+﻿@model IEnumerable<Booking>
+@{
     ViewData["Title"] = "Bookings";
 }
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Booking Date</td>
+            <td>Doctor Name</td>
+            <td>Procedure</td>
+            <td>Patient Name</td>
+            <td>Patient E-Mail</td>
+            <td>Patient Phone</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>       
+            @foreach (var booking in Model)
+            {
+                <tr>
+                    <td>
+                        @booking.dateTime.Date.ToShortDateString();
+                    </td>
+                    <td>
+                        @booking.Doctor.Name
+                    </td>
+                    <td>
+                        @booking.Procedure.Name
+                    </td>
+                    <td>
+                        @booking.Client.Name
+                    </td>
+                    <td>
+                        <a href="mailto:@booking.Client.UserName">@booking.Client.UserName</a>
+                    </td>
+                    <td>
+                        @booking.Client.PhoneNumber
+                    </td>
+                    <td>
+                        @booking.BookingState
+                    </td>
+                </tr>
+            }
+    </tbody>
+</table>

@@ -1,1 +1,17 @@
 ﻿
+
+Project includes multiple class libraries can be used by multiple databases, 
+with adding a connection string and definition to appsettings.json file and migration to suitable database it is possible. 
+I personally used MySql because MsSql working quite slow on my pc. 
+
+Default admin is created at start. 
+
+Admin panel :
+	-Adding and modifying procedures, 
+	-Managing users (if registered user is a doctor the role can be switched),
+	-Listing of bookings. (needs to be modified)
+
+HomePage : 
+	-Registration of users with auto email confirmation token,
+	-Forgot password with auto email,
+	-After user is logged in new booking function. 
